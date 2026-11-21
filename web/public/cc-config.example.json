@@ -1,0 +1,5 @@
+{
+  "hassUrl": "http://homeassistant.local:8123",
+  "outsideEntity": "weather.forecast_home",
+  "scenes": ["scene.morning", "scene.relax", "scene.movie", "scene.goodnight"]
+}

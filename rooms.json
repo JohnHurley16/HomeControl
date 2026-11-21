@@ -1,0 +1,12 @@
+{
+  "minisplit": "mitsubishi",
+  "radar": "ld2410",
+  "tracker": "ld2450",
+  "strip_kelvin": [2700, 6500],
+  "rooms": [
+    { "slug": "living_room", "host": "living-room", "name": "Living room" },
+    { "slug": "kitchen", "host": "kitchen", "name": "Kitchen" },
+    { "slug": "bedroom", "host": "bedroom", "name": "Bedroom" },
+    { "slug": "office", "host": "office", "name": "Office" }
+  ]
+}

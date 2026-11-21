@@ -1,0 +1,68 @@
+# Scenes are personal, so this file is hand-written and yours to edit.
+# Entity ids come out as scene.morning, scene.relax, scene.movie and scene.goodnight.
+# brightness is 0 to 255.
+#
+# color_temp_kelvin here is the light entity's own scale, not the Kelvin printed on the strip.
+# Home Assistant's WLED integration calls any CCT strip 2000 to 6535: 2000 is warm LEDs only,
+# 6535 is cool LEDs only. For the 2700 to 6500 K strip in this build:
+#     strip   2700  2900  3500  4000  4500  5500  6500
+#     write   2000  2239  2955  3551  4148  5342  6535
+# (Presets and the front end do this conversion for you; a scene is a fixed snapshot, so here
+# it is done by hand. Scenes made in Home Assistant's own scene editor need no conversion.)
+
+scene:
+  - id: cc_morning
+    name: Morning
+    icon: mdi:weather-sunset-up
+    entities:
+      input_select.house_mode: Home
+      light.kitchen_ceiling:
+        state: "on"
+        brightness: 255
+        color_temp_kelvin: 4148
+      light.living_room_ceiling:
+        state: "on"
+        brightness: 200
+        color_temp_kelvin: 3551
+      light.bedroom_ceiling:
+        state: "on"
+        brightness: 115
+        color_temp_kelvin: 2239
+
+  - id: cc_relax
+    name: Relax
+    icon: mdi:sofa
+    entities:
+      light.living_room_ceiling:
+        state: "on"
+        brightness: 115
+        color_temp_kelvin: 2239
+      light.kitchen_ceiling:
+        state: "on"
+        brightness: 90
+        color_temp_kelvin: 2239
+
+  - id: cc_movie
+    name: Movie
+    icon: mdi:movie-open
+    entities:
+      light.living_room_ceiling:
+        state: "on"
+        brightness: 38
+        color_temp_kelvin: 2000
+      light.kitchen_ceiling:
+        state: "off"
+
+  - id: cc_goodnight
+    name: Goodnight
+    icon: mdi:weather-night
+    entities:
+      input_select.house_mode: Sleep
+      light.living_room_ceiling:
+        state: "off"
+      light.kitchen_ceiling:
+        state: "off"
+      light.bedroom_ceiling:
+        state: "off"
+      light.office_ceiling:
+        state: "off"

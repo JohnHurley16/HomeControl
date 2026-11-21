@@ -1,0 +1,31 @@
+# Home Assistant app (formerly "add-on") definition for the Control Center.
+name: Control Center
+version: "0.1.0"
+slug: cc
+description: Wall-tablet and phone front end for the apartment, plus the cc-core thermostat rules
+arch:
+  - aarch64
+  - amd64
+init: true
+startup: application
+boot: auto
+# cc-core talks to Home Assistant through the Supervisor proxy; no token to create or paste.
+homeassistant_api: true
+homeassistant: "2025.1.0"
+ports:
+  8099/tcp: 8099
+ports_description:
+  8099/tcp: Front end (open http://homeassistant.local:8099 on the tablet and phones)
+watchdog: "http://[HOST]:[PORT:8099]/healthz"
+options:
+  public_hass_url: ""
+  outside_entity: weather.forecast_home
+  preheat_radius_mi: 3
+  proximity_prefix: sensor.home_nearest
+  rules: true
+schema:
+  public_hass_url: "str?"
+  outside_entity: str
+  preheat_radius_mi: "float(0.2,50)"
+  proximity_prefix: str
+  rules: bool

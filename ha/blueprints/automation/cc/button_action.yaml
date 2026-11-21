@@ -1,0 +1,128 @@
+blueprint:
+  name: "CC: button action"
+  description: >-
+    Maps one press of a wall remote to one control-center action. Pick the press from the
+    remote's own device triggers, so this works with any Zigbee remote. Create one automation
+    per key and gesture: a room remote needs six (lights on, hold to brighten, lights off,
+    hold to dim, warmer, cooler).
+  domain: automation
+  input:
+    press:
+      name: Button press
+      description: Add the remote's device trigger for this key and gesture.
+      selector:
+        trigger:
+    what:
+      name: What it does
+      selector:
+        select:
+          mode: dropdown
+          options:
+            - label: Lights on, or next preset
+              value: lights_on
+            - label: Lights off
+              value: lights_off
+            - label: Brighter
+              value: brighter
+            - label: Dimmer
+              value: dimmer
+            - label: Warmer by 1 degree
+              value: warmer
+            - label: Cooler by 1 degree
+              value: cooler
+            - label: House mode Home
+              value: mode_home
+            - label: House mode Away
+              value: mode_away
+            - label: Goodnight
+              value: goodnight
+            - label: Night light
+              value: night_light
+            - label: All lights off
+              value: all_off
+    room:
+      name: Room slug
+      description: The room this key controls, for example living_room. Leave empty for house actions.
+      default: ""
+      selector:
+        text:
+
+mode: queued
+max: 5
+
+triggers: !input press
+
+variables:
+  what: !input what
+  room: !input room
+  light: "light.{{ room }}_ceiling"
+  offset: "input_number.{{ room }}_offset"
+
+actions:
+  - choose:
+      - conditions: "{{ what == 'lights_on' }}"
+        sequence:
+          - action: script.cc_lights_on
+            data:
+              room: "{{ room }}"
+      - conditions: "{{ what == 'lights_off' }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id: "{{ light }}"
+            data:
+              transition: 1
+      - conditions: "{{ what == 'brighter' }}"
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: "{{ light }}"
+            data:
+              brightness_step_pct: 20
+              transition: 0.5
+      - conditions: "{{ what == 'dimmer' }}"
+        sequence:
+          - condition: template
+            value_template: "{{ is_state(light, 'on') }}"
+          - action: light.turn_on
+            target:
+              entity_id: "{{ light }}"
+            data:
+              brightness_pct: "{{ [((state_attr(light, 'brightness') | int(255)) / 2.55 - 20) | int, 1] | max }}"
+              transition: 0.5
+      - conditions: "{{ what == 'warmer' }}"
+        sequence:
+          - action: input_number.increment
+            target:
+              entity_id: "{{ offset }}"
+      - conditions: "{{ what == 'cooler' }}"
+        sequence:
+          - action: input_number.decrement
+            target:
+              entity_id: "{{ offset }}"
+      - conditions: "{{ what == 'mode_home' }}"
+        sequence:
+          - action: input_select.select_option
+            target:
+              entity_id: input_select.house_mode
+            data:
+              option: Home
+      - conditions: "{{ what == 'mode_away' }}"
+        sequence:
+          - action: input_select.select_option
+            target:
+              entity_id: input_select.house_mode
+            data:
+              option: Away
+      - conditions: "{{ what == 'goodnight' }}"
+        sequence:
+          - action: script.cc_goodnight
+      - conditions: "{{ what == 'night_light' }}"
+        sequence:
+          - action: script.cc_light_preset
+            data:
+              room: "{{ room }}"
+              preset: night
+      - conditions: "{{ what == 'all_off' }}"
+        sequence:
+          - action: script.cc_all_off

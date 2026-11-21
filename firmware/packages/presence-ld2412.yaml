@@ -1,0 +1,84 @@
+# Presence node, alternative radar: ESP32-C3 SuperMini + HLK-LD2412.
+# Used when rooms.json has "radar": "ld2412". The default build is presence-ld2410.yaml.
+# Wiring: board 5V -> radar VCC, GND -> GND, radar TX -> GPIO20, radar RX -> GPIO21.
+# With room_name "Living room" the entities come up as
+#   binary_sensor.living_room_presence   (the one the rules read)
+#   binary_sensor.living_room_moving / _still
+#   sensor.living_room_still_distance, _still_energy, _moving_distance, _moving_energy, _radar_light
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# A list, so tracker-ld2450.yaml can add the second radar's port.
+uart:
+  - id: radar_uart
+    rx_pin: GPIO20
+    tx_pin: GPIO21
+    baud_rate: 115200
+    parity: NONE
+    stop_bits: 1
+
+ld2412:
+  uart_id: radar_uart
+
+binary_sensor:
+  - platform: ld2412
+    has_target:
+      name: Presence
+      device_class: occupancy
+    has_moving_target:
+      name: Moving
+    has_still_target:
+      name: Still
+
+sensor:
+  - platform: ld2412
+    moving_distance:
+      name: Moving distance
+    still_distance:
+      name: Still distance
+    moving_energy:
+      name: Moving energy
+    still_energy:
+      name: Still energy
+    detection_distance:
+      name: Detection distance
+    light:
+      name: Radar light
+
+number:
+  - platform: ld2412
+    timeout:
+      name: Radar timeout
+    min_distance_gate:
+      name: Min distance gate
+    max_distance_gate:
+      name: Max distance gate
+
+button:
+  - platform: ld2412
+    start_dynamic_background_correction:
+      name: Calibrate empty room
+    query_params:
+      name: Radar query params
+    restart:
+      name: Radar restart
+
+switch:
+  - platform: ld2412
+    engineering_mode:
+      name: Engineering mode
+    bluetooth:
+      name: Radar Bluetooth
+
+select:
+  - platform: ld2412
+    distance_resolution:
+      name: Distance resolution
+
+text_sensor:
+  - platform: ld2412
+    version:
+      name: Radar firmware

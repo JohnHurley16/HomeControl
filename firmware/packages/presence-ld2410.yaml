@@ -1,0 +1,178 @@
+# Presence node: ESP32-C3 SuperMini + HLK-LD2410C radar. Used when rooms.json has "radar": "ld2410".
+# Wiring: board 5V -> radar VCC, GND -> GND, radar TX -> GPIO20, radar RX -> GPIO21.
+# The radar talks at 256000 baud out of the box. OUT is not connected.
+# With room_name "Living room" the entities come up as
+#   binary_sensor.living_room_presence   (the one the rules read)
+#   binary_sensor.living_room_moving / _still
+#   sensor.living_room_still_distance, _still_energy, _moving_distance, _moving_energy, _radar_light
+#
+# Tuning: a gate is one 0.75 m slice of distance (gate 0 is at the sensor, gate 8 is 6 m out).
+# Turn "Engineering mode" on to see each gate's live energy, then set that gate's threshold
+# just above what an empty room shows. Turn engineering mode off again when done.
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# A list, so tracker-ld2450.yaml can add the second radar's port.
+uart:
+  - id: radar_uart
+    rx_pin: GPIO20
+    tx_pin: GPIO21
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
+ld2410:
+  uart_id: radar_uart
+
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: Presence
+      device_class: occupancy
+    has_moving_target:
+      name: Moving
+    has_still_target:
+      name: Still
+
+sensor:
+  - platform: ld2410
+    moving_distance:
+      name: Moving distance
+    still_distance:
+      name: Still distance
+    moving_energy:
+      name: Moving energy
+    still_energy:
+      name: Still energy
+    detection_distance:
+      name: Detection distance
+    light:
+      name: Radar light
+    g0:
+      move_energy:
+        name: Gate 0 move energy
+      still_energy:
+        name: Gate 0 still energy
+    g1:
+      move_energy:
+        name: Gate 1 move energy
+      still_energy:
+        name: Gate 1 still energy
+    g2:
+      move_energy:
+        name: Gate 2 move energy
+      still_energy:
+        name: Gate 2 still energy
+    g3:
+      move_energy:
+        name: Gate 3 move energy
+      still_energy:
+        name: Gate 3 still energy
+    g4:
+      move_energy:
+        name: Gate 4 move energy
+      still_energy:
+        name: Gate 4 still energy
+    g5:
+      move_energy:
+        name: Gate 5 move energy
+      still_energy:
+        name: Gate 5 still energy
+    g6:
+      move_energy:
+        name: Gate 6 move energy
+      still_energy:
+        name: Gate 6 still energy
+    g7:
+      move_energy:
+        name: Gate 7 move energy
+      still_energy:
+        name: Gate 7 still energy
+    g8:
+      move_energy:
+        name: Gate 8 move energy
+      still_energy:
+        name: Gate 8 still energy
+
+number:
+  - platform: ld2410
+    timeout:
+      name: Radar timeout
+    max_move_distance_gate:
+      name: Max move distance gate
+    max_still_distance_gate:
+      name: Max still distance gate
+    g0:
+      move_threshold:
+        name: Gate 0 move threshold
+      still_threshold:
+        name: Gate 0 still threshold
+    g1:
+      move_threshold:
+        name: Gate 1 move threshold
+      still_threshold:
+        name: Gate 1 still threshold
+    g2:
+      move_threshold:
+        name: Gate 2 move threshold
+      still_threshold:
+        name: Gate 2 still threshold
+    g3:
+      move_threshold:
+        name: Gate 3 move threshold
+      still_threshold:
+        name: Gate 3 still threshold
+    g4:
+      move_threshold:
+        name: Gate 4 move threshold
+      still_threshold:
+        name: Gate 4 still threshold
+    g5:
+      move_threshold:
+        name: Gate 5 move threshold
+      still_threshold:
+        name: Gate 5 still threshold
+    g6:
+      move_threshold:
+        name: Gate 6 move threshold
+      still_threshold:
+        name: Gate 6 still threshold
+    g7:
+      move_threshold:
+        name: Gate 7 move threshold
+      still_threshold:
+        name: Gate 7 still threshold
+    g8:
+      move_threshold:
+        name: Gate 8 move threshold
+      still_threshold:
+        name: Gate 8 still threshold
+
+button:
+  - platform: ld2410
+    query_params:
+      name: Radar query params
+    restart:
+      name: Radar restart
+    factory_reset:
+      name: Radar factory reset
+
+switch:
+  - platform: ld2410
+    engineering_mode:
+      name: Engineering mode
+    bluetooth:
+      name: Radar Bluetooth
+
+select:
+  - platform: ld2410
+    distance_resolution:
+      name: Distance resolution
+
+text_sensor:
+  - platform: ld2410
+    version:
+      name: Radar firmware

@@ -1,0 +1,8 @@
+node_modules/
+web/dist/
+core/dist/
+dist/
+firmware/secrets.yaml
+firmware/**/.esphome/
+.env
+__pycache__/

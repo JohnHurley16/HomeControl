@@ -1,0 +1,18 @@
+{
+  "name": "home-control",
+  "private": true,
+  "version": "0.1.7",
+  "description": "Control center for the apartment: firmware, Home Assistant packages, front end and rules service",
+  "workspaces": [
+    "web",
+    "core"
+  ],
+  "scripts": {
+    "generate": "node tools/generate.mjs",
+    "typecheck": "npm run typecheck -w core && npm run typecheck -w web",
+    "test": "npm run test -w core && npm run test -w web",
+    "build": "npm run build -w web && npm run build -w core",
+    "package": "npm run build && node tools/package.mjs",
+    "dev": "npm run dev -w web"
+  }
+}

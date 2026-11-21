@@ -1,0 +1,33 @@
+# Mini-split bridge for Midea-built units (Midea, MRCOOL, Carrier ductless, Senville, Pioneer and others)
+# using a SMLIGHT SLWF-01Pro dongle in the indoor unit's USB port. The dongle is an ESP8266.
+# Uses ESPHome's built-in Midea climate platform.
+# With room_name "Living room" the unit comes up as climate.living_room.
+# This family has no wired remote-temperature input, so cc-core corrects the target instead.
+
+esp8266:
+  board: esp12e
+
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 9600
+
+climate:
+  - platform: midea
+    name: None # takes the device name, so the entity is climate.<room>
+    period: 1s
+    timeout: 2s
+    num_attempts: 3
+    autoconf: true
+    beeper: false
+    visual:
+      min_temperature: 17 °C
+      max_temperature: 30 °C
+      temperature_step: 0.5 °C
+    supported_modes:
+      - FAN_ONLY
+      - COOL
+      - HEAT
+      - DRY
+    outdoor_temperature:
+      name: Outdoor temperature

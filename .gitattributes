@@ -1,0 +1,10 @@
+# Text files are stored and checked out with LF line endings on every system, Windows included.
+# The generated firmware and Home Assistant files are compared byte for byte with fresh output.
+* text=auto eol=lf
+
+# Print and CAD files are never converted.
+*.stl binary
+*.3mf binary
+*.step -text
+*.png binary
+*.jpg binary

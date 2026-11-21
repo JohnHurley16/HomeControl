@@ -1,0 +1,44 @@
+# Mini-split bridge for Mitsubishi Electric indoor units with a CN105 port.
+# Uses the community component echavet/MitsubishiCN105ESPHome (not part of ESPHome itself).
+# Board: ESP32-C3 SuperMini by default. Override rx_pin / tx_pin in the room file for another board.
+# With room_name "Living room" the unit comes up as climate.living_room.
+
+substitutions:
+  rx_pin: GPIO20
+  tx_pin: GPIO21
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+external_components:
+  - source: github://echavet/MitsubishiCN105ESPHome
+
+uart:
+  id: hp_uart
+  baud_rate: 2400
+  rx_pin: ${rx_pin}
+  tx_pin: ${tx_pin}
+
+climate:
+  - platform: cn105
+    id: hp
+    name: None # takes the device name, so the entity is climate.<room>
+    update_interval: 2s
+    fahrenheit_compatibility: "standard" # keeps Fahrenheit setpoints in step with the unit's own table
+    remote_temperature_timeout: 30min # falls back to the unit's own sensor if cc-core stops feeding it
+    remote_temperature_keepalive_interval: 20s
+
+# cc-core calls these to make the unit regulate on the room sensor.
+# Home Assistant exposes them as esphome.<host>_set_remote_temperature (Celsius).
+api:
+  actions:
+    - action: set_remote_temperature
+      variables:
+        temperature: float
+      then:
+        - lambda: "id(hp).set_remote_temperature(temperature);"
+    - action: use_internal_temperature
+      then:
+        - lambda: "id(hp).set_remote_temperature(0);"

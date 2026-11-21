@@ -1,0 +1,13 @@
+# For running the same container outside Home Assistant OS (a NAS, a laptop, Home Assistant Container).
+# Create a long-lived access token in Home Assistant (your profile > Security) and put it in .env as HASS_TOKEN.
+services:
+  cc:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8099:8099"
+    environment:
+      HASS_URL: http://homeassistant.local:8123
+      HASS_TOKEN: ${HASS_TOKEN}
+      # CC_PUBLIC_HASS_URL: https://ha.example.com
+      # CC_RULES: "off"

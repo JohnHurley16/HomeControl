@@ -1,0 +1,114 @@
+# Position tracker: an HLK-LD2450 radar added to a presence node as its second radar.
+# Used when rooms.json has "tracker": "ld2450" (for the house or for one room).
+# It only feeds the room map in the app. Occupancy still comes from the first radar,
+# because the LD2450 loses people who sit still and can report ghosts near fans.
+#
+# Wiring: board 5V -> radar 5V, GND -> GND, radar TX -> GPIO1, radar RX -> GPIO0.
+# 256000 baud out of the box. Radar firmware V2.02.23090617 or newer.
+# A node flashed with this file runs normally with no LD2450 fitted: the entities stay unknown.
+#
+# With room_name "Living room" the entities come up as
+#   sensor.living_room_target_1_x, _target_1_y, _target_1_speed   (and target 2, target 3)
+#   sensor.living_room_tracked_people, binary_sensor.living_room_tracking
+# X is left (-) and right (+) of the radar as the radar sees the room, Y is the distance out.
+# A target slot that is empty reports 0 for both.
+
+uart:
+  - id: tracker_uart
+    rx_pin:
+      number: GPIO1
+      mode:
+        input: true
+        pullup: true
+    tx_pin: GPIO0
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
+ld2450:
+  id: tracker
+  uart_id: tracker_uart
+
+binary_sensor:
+  - platform: ld2450
+    ld2450_id: tracker
+    has_target:
+      name: Tracking
+    has_moving_target:
+      name: Tracking movement
+
+# The radar sends ten frames a second. Positions go out at most twice a second, and only
+# when they moved 5 cm, so a quiet room sends nothing and the Pi's history stays small.
+sensor:
+  - platform: ld2450
+    ld2450_id: tracker
+    target_count:
+      name: Tracked people
+    target_1:
+      x:
+        name: Target 1 X
+        filters: &position
+          - timeout:
+              timeout: 500ms
+              value: last
+          - throttle_with_priority: 500ms
+          - delta: 50
+      y:
+        name: Target 1 Y
+        filters: *position
+      speed:
+        name: Target 1 speed
+        filters: &speed
+          - timeout:
+              timeout: 1s
+              value: last
+          - throttle_with_priority: 1s
+          - delta: 100
+    target_2:
+      x:
+        name: Target 2 X
+        filters: *position
+      y:
+        name: Target 2 Y
+        filters: *position
+      speed:
+        name: Target 2 speed
+        filters: *speed
+    target_3:
+      x:
+        name: Target 3 X
+        filters: *position
+      y:
+        name: Target 3 Y
+        filters: *position
+      speed:
+        name: Target 3 speed
+        filters: *speed
+
+number:
+  - platform: ld2450
+    ld2450_id: tracker
+    presence_timeout:
+      name: Tracker timeout
+
+switch:
+  - platform: ld2450
+    ld2450_id: tracker
+    multi_target:
+      name: Track several people
+    bluetooth:
+      name: Tracker Bluetooth
+
+button:
+  - platform: ld2450
+    ld2450_id: tracker
+    restart:
+      name: Tracker restart
+    factory_reset:
+      name: Tracker factory reset
+
+text_sensor:
+  - platform: ld2450
+    ld2450_id: tracker
+    version:
+      name: Tracker firmware

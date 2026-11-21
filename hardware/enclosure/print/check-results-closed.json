@@ -1,0 +1,180 @@
+{
+  "front": "closed",
+  "outside_mm": [
+    23.6,
+    54.52,
+    9.0
+  ],
+  "checks": [
+    {
+      "name": "shell is one valid solid",
+      "pass": true,
+      "detail": "3629 mm3, 4.6 g in PETG"
+    },
+    {
+      "name": "back plate is one valid solid",
+      "pass": true,
+      "detail": "1744 mm3, 2.2 g in PETG"
+    },
+    {
+      "name": "C3 seated: no contact with the shell (PCB 0.6, 1.0, 1.6 mm)",
+      "pass": true,
+      "detail": "overlap 0.0000 mm3"
+    },
+    {
+      "name": "radar seated: no contact with the shell (pins bent, cut, none)",
+      "pass": true,
+      "detail": "overlap 0.0000 mm3"
+    },
+    {
+      "name": "both boards lower straight in from the back",
+      "pass": true,
+      "detail": "worst overlap on the way 0.0000 mm3"
+    },
+    {
+      "name": "back plate slides parked -> locked without touching the shell",
+      "pass": true,
+      "detail": "worst overlap 0.0000 mm3 over 13 positions"
+    },
+    {
+      "name": "back plate slides parked -> locked without touching either board",
+      "pass": true,
+      "detail": "worst overlap 0.0000 mm3"
+    },
+    {
+      "name": "back plate lowers straight on in the parked position",
+      "pass": true,
+      "detail": "worst overlap shell 0.0000, boards 0.0000 mm3"
+    },
+    {
+      "name": "locked: the catches stop the plate lifting off",
+      "pass": true,
+      "detail": "free play before the barbs meet the catches 0.20 mm"
+    },
+    {
+      "name": "locked: 1 mm of lift is solidly blocked",
+      "pass": true,
+      "detail": "2.56 mm3 of barb inside the catches"
+    },
+    {
+      "name": "locked: plate cannot slide further up",
+      "pass": true,
+      "detail": "barbs meet the stops"
+    },
+    {
+      "name": "parked: plate lifts off freely",
+      "pass": true,
+      "detail": "no overlap"
+    },
+    {
+      "name": "crush ribs bite a 16.0 x 22.0 mm radar board",
+      "pass": true,
+      "detail": "0.092 mm3 of rib to squash"
+    },
+    {
+      "name": "detent ribs sit free in their grooves when parked and when locked",
+      "pass": true,
+      "detail": "overlap locked 0.0000, parked 0.0000 mm3"
+    },
+    {
+      "name": "detent ribs press on the walls between the grooves",
+      "pass": true,
+      "detail": "0.211 mm3 (walls flex 0.15 mm)"
+    },
+    {
+      "name": "radar sits on four corner rests",
+      "pass": true,
+      "detail": "4 of 4 corners carried, 0.5 mm of board edge on each"
+    },
+    {
+      "name": "radar parts and 1.8 mm solder tails clear the 0.8 mm front",
+      "pass": true,
+      "detail": "1 mm parts 1.00 mm, tails 0.20 mm"
+    },
+    {
+      "name": "wall left where the radar's pocket runs into it",
+      "pass": true,
+      "detail": "1.05 mm"
+    },
+    {
+      "name": "radar header pins (bent) clear the back plate",
+      "pass": true,
+      "detail": "0.62 mm (radar PCB 1.2 mm)"
+    },
+    {
+      "name": "radar header pins (cut) clear the back plate",
+      "pass": true,
+      "detail": "0.26 mm (radar PCB 1.2 mm)"
+    },
+    {
+      "name": "pad over the USB-C receptacle",
+      "pass": true,
+      "detail": "0.14 mm above the receptacle"
+    },
+    {
+      "name": "tabs over the C3 pads",
+      "pass": true,
+      "detail": "0.20 mm above the board, whatever its thickness"
+    },
+    {
+      "name": "back stops behind a 1.0 mm radar board",
+      "pass": true,
+      "detail": "0.80 mm"
+    },
+    {
+      "name": "back stops behind a 1.2 mm radar board",
+      "pass": true,
+      "detail": "0.60 mm"
+    },
+    {
+      "name": "back stops behind a 1.6 mm radar board",
+      "pass": true,
+      "detail": "0.20 mm"
+    },
+    {
+      "name": "radar header pins (bent) clear the back plate with a 1.6 mm radar board",
+      "pass": true,
+      "detail": "0.22 mm"
+    },
+    {
+      "name": "6.5 mm thick USB-C plug stays inside the bar's profile",
+      "pass": true,
+      "detail": "front 1.98 mm, wall side 0.52 mm to spare"
+    },
+    {
+      "name": "7.0 mm thick USB-C plug stays inside the bar's profile",
+      "pass": true,
+      "detail": "front 1.73 mm, wall side 0.27 mm to spare"
+    },
+    {
+      "name": "a plugged-in cable does not touch the locked back plate",
+      "pass": true,
+      "detail": "no overlap"
+    },
+    {
+      "name": "a plugged-in cable blocks the slide to the parked position (the cable locks the bar on)",
+      "pass": true,
+      "detail": "17.9 mm3 of plug in the way, even with a 5.5 mm thick plug"
+    },
+    {
+      "name": "shell (front face down): prints without supports",
+      "pass": true,
+      "detail": "steepest overhang 45.0 deg, 23.9 mm2 of 45 deg ramps, 0.00 mm2 beyond"
+    },
+    {
+      "name": "back plate (wall side down): prints without supports",
+      "pass": true,
+      "detail": "steepest overhang 45.0 deg, 11.4 mm2 of 45 deg ramps, 0.00 mm2 beyond"
+    },
+    {
+      "name": "presence-v2-shell-closed.stl is a closed, consistently oriented mesh",
+      "pass": true,
+      "detail": "1416 triangles, 3629 mm3, 23.6 x 54.52 x 7.8 mm, lowest point z=-0.00"
+    },
+    {
+      "name": "presence-v2-back.stl is a closed, consistently oriented mesh",
+      "pass": true,
+      "detail": "1572 triangles, 1744 mm3, 23.6 x 54.52 x 5.2 mm, lowest point z=-0.00"
+    }
+  ]
+}
