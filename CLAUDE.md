@@ -39,6 +39,25 @@ was not" lists what has been tested in software.
 - **Mini-split room files need Git.** The `*-ac.yaml` files fetch a component from GitHub while
   building.
 
+## When an agent runs the Windows guide
+
+The guide is written for a person at a terminal. A coding agent running the same steps on the
+laptop needs these adjustments:
+
+- **Nothing may wait for typing.** `esphome run` and `esphome logs` ask which port to use and then
+  wait. Pass `--device COM5` with the board's real port, or `--device OTA` for Wi-Fi.
+  `py -3.13 -m serial.tools.list_ports -v` lists the ports once ESPHome is installed.
+- **`setx` only reaches programs started afterwards.** In a session that was already open, also
+  set the variable for that session before building, for example in PowerShell:
+  `$env:ESPHOME_ESP_IDF_PREFIX = 'C:\ESPHome\idf'`. The same goes for `PATH` after installing
+  Python: start a new terminal or session.
+- **The buttons need a person.** Ask for download mode before the upload and for one press of RST
+  after it, and wait for the answer.
+- **The first build is long and quiet.** Give it a long timeout and do not stop it because the
+  output has paused. The toolchain download alone is several hundred megabytes.
+- **Secrets stay with the person.** Have them fill in `firmware/secrets.yaml` (Step 4 of the
+  guide). Do not read the file back or echo its values.
+
 ## Rules for changes
 
 - `rooms.json` is the source for the rooms and the device choices. `npm run generate` writes
